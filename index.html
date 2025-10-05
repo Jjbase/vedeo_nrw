@@ -1,277 +1,339 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>VEDEO NRW – Anmeldung (11.10.2025 Düsseldorf)</title>
-  <meta name="description" content="Anmeldung für das VEDEO NRW Treffen am 11. Oktober 2025 in Düsseldorf.">
+  <meta name="description" content="Landing Page für die Anmeldung zum VEDEO NRW Treffen am 11. Oktober 2025 in Düsseldorf." />
 
   <style>
     :root{
-      --flag-black:#000;
-      --flag-red:#dd0000;
-      --flag-gold:#ffce00;
-      --bg:#f7f7f8;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --card:#fff;
-      --border:#e5e7eb;
+      --flag-black:#000; --flag-red:#dd0000; --flag-gold:#ffce00;
+      --bg:#f7f7f8; --text:#1f2937; --muted:#6b7280; --card:#fff; --border:#e5e7eb;
+      --primary:#0f766e; --primary-700:#0b5f59; --danger:#dc2626;
     }
     *{box-sizing:border-box}
-    html,body{margin:0}
-    body{
-      background:var(--bg);
-      color:var(--text);
-      font:16px/1.45 system-ui,Segoe UI,Roboto,Arial,sans-serif;
-    }
-    .wrap{
-      max-width:960px;
-      margin:24px auto;
-      padding:0 16px;
-    }
-    header.hero{
-      color:#fff;
-      padding:26px 22px;
-      border-radius:16px;
-      background:linear-gradient(90deg,var(--flag-black) 0 33%,var(--flag-red) 33% 66%,var(--flag-gold) 66% 100%);
-      box-shadow:0 6px 18px rgba(0,0,0,.08);
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:22px;
-      box-shadow:0 6px 18px rgba(0,0,0,.05);
-    }
-    h1{margin:.2rem 0 0;font-size:clamp(26px,4vw,38px);font-weight:800}
-    .subtitle{margin-top:6px;color:#fff;opacity:.95}
-    h2{
-      color:var(--flag-red);
-      margin: 18px 0 12px;
-      font-size:clamp(18px,2.6vw,22px);
-    }
-    .grid{
-      display:grid;
-      gap:14px;
-      grid-template-columns:1fr;
-    }
-    @media(min-width:760px){
-      .grid-2{grid-template-columns:repeat(2,1fr)}
-    }
-    label{display:block;font-weight:600;margin-bottom:6px}
+    html,body{margin:0;background:var(--bg);color:var(--text);
+      font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    .container{max-width:960px;margin:0 auto;padding:24px}
+    header.hero{border-radius:18px;overflow:hidden;margin:24px 0;
+      background:linear-gradient(90deg,var(--flag-black) 0 33%, var(--flag-red) 33% 66%, var(--flag-gold) 66% 100%)}
+    header .inner{background:rgba(255,255,255,.94);padding:28px 24px}
+    h1{margin:0 0 8px 0;font-size:clamp(24px,4vw,34px);font-weight:800}
+    .subtitle{color:var(--muted);margin:0}
+
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin:16px 0}
+    .section{color:var(--flag-red);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px;margin:0 0 12px 0}
+    label{display:block;font-size:14px;font-weight:600;margin:10px 0 6px}
     input,select,textarea{
-      width:100%;
-      background: #fff;
-      border:1px solid var(--border);
-      border-radius:10px;
-      padding:11px 12px;
-      font-size:16px;
-    }
-    textarea{min-height:90px;resize:vertical}
-    input:focus,select:focus,textarea:focus{
-      border-color:var(--flag-red);
-      outline:0;
-      box-shadow:0 0 0 3px #dd000022;
-    }
-    .note{font-size:13px;color:var(--muted)}
+      width:100%;padding:11px;border:1px solid var(--border);border-radius:12px;background:#fff}
+    input:focus,textarea:focus,select:focus{border-color:var(--flag-red);outline:none;box-shadow:0 0 0 2px #ffce0033}
     .row{display:grid;gap:12px}
-    .radio{display:flex;gap:18px;flex-wrap:wrap}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn{
-      background:var(--flag-red);
-      color:#fff;border:0;border-radius:10px;
-      padding:12px 16px;font-weight:700;cursor:pointer
+    @media (min-width:768px){ .row{grid-template-columns:1fr 1fr} }
+
+    .radio{display:flex;gap:14px;flex-wrap:wrap}
+    .note{font-size:12px;color:#9b1c1c;margin-top:4px;min-height:1.25em}
+
+    .btn{appearance:none;border:1px solid var(--border);background:#fff;padding:10px 16px;border-radius:12px;cursor:pointer}
+    .btn:hover{background:#fafafa}
+    .btn.primary{background:var(--flag-red);color:#fff;border-color:var(--flag-red)}
+    .btn.primary:hover{filter:brightness(.96)}
+    .muted{font-size:12px;color:var(--muted)}
+    .success{background:#ecfdf5;border:1px solid #065f46;padding:12px;border-radius:10px;margin:16px 0;color:#065f46}
+
+    footer{margin:24px 0;color:var(--muted);text-align:center;font-size:12px}
+
+    /* dezentes Wasserzeichen unten rechts */
+    body::after{
+      content:"⩥ WOLF ᴏʀ ᴅɪᴇ 💀"; 
+      position:fixed; right:14px; bottom:10px; 
+      font-size:11px; letter-spacing:.25em; color:#9ca3af55; user-select:none; pointer-events:none
     }
-    .btn.secondary{background:#fff;color:var(--text);border:1px solid var(--border)}
-    .ok{display:none;margin-top:10px;border:1px solid #c6f6d5;background:#f0fff4;color:#22543d;border-radius:10px;padding:10px}
-    .error{display:none;margin-top:10px;border:1px solid #fed7d7;background:#fff5f5;color:#742a2a;border-radius:10px;padding:10px}
-    footer{margin:26px 0 18px;text-align:center;color:var(--muted);font-size:13px}
-    .watermark{margin-top:8px;color:var(--muted);font-size:13px}
-    .hide{display:none !important;}
   </style>
 </head>
-
 <body>
-  <div class="wrap">
-    <header class="hero card">
-      <h1>VEDEO NRW – Anmeldung</h1>
-      <p class="subtitle">Einladung zum VEDEO NRW Treffen am <b>Samstag, 11. Oktober 2025</b> in <b>Düsseldorf</b>.</p>
+  <div class="container">
+    <header class="hero">
+      <div class="inner">
+        <h1>VEDEO NRW – Anmeldung</h1>
+        <p class="subtitle">
+          Einladung zum VEDEO NRW Treffen am <b>Samstag, 11. Oktober 2025</b> in <b>Düsseldorf</b>.
+        </p>
+      </div>
     </header>
 
-    <!-- FORMULAR (Netlify) -->
-    <section class="card" style="margin-top:16px">
-      <form
-        name="vedeo-nrw"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        id="form"
-      >
-        <!-- Netlify benötigt diese Hidden Inputs -->
-        <input type="hidden" name="form-name" value="vedeo-nrw">
-        <p class="hide">
-          <label>Bitte leer lassen <input name="bot-field"></label>
-        </p>
+    <!-- Erfolgshinweis bei Redirect /?success=1 -->
+    <div id="ok" class="success" style="display:none">
+      <b>Danke!</b> Deine Angaben wurden übermittelt und erscheinen im Netlify-Formularbereich.
+    </div>
 
-        <!-- 1. Kontaktinformationen -->
-        <h2>Kontaktinformationen</h2>
-        <div class="grid grid-2">
+    <!--
+      NETLIFY FORMS
+      - name="anmeldung" ist der Formularname, unter dem Submissions im Netlify-Dashboard auftauchen
+      - data-netlify="true" aktiviert das Parsen
+      - netlify-honeypot="bot-field" ist eine Spam-Falle
+      - verstecktes input form-name muss den gleichen Namen wie das Formular tragen
+      - action="/?success=1" leitet nach erfolgreicher Sub­mission auf dieselbe Seite mit Erfolgshinweis
+    -->
+    <form id="form" name="anmeldung" method="POST"
+          data-netlify="true" netlify-honeypot="bot-field"
+          action="/?success=1" novalidate>
+      <input type="hidden" name="form-name" value="anmeldung" />
+      <p style="display:none">
+        <label>Bitte frei lassen: <input name="bot-field" /></label>
+      </p>
+
+      <!-- Kontakt -->
+      <div class="card">
+        <h2 class="section">Kontaktinformationen</h2>
+        <div class="row">
           <div>
-            <label for="name">Name <span class="note">*</span></label>
-            <input id="name" name="name" required />
+            <label for="name">Name <span style="color:var(--flag-red)">*</span></label>
+            <input id="name" name="name" required placeholder="Vor- und Nachname" />
+            <div class="note" data-err="name"></div>
           </div>
           <div>
             <label for="phone">Telefon</label>
             <input id="phone" name="phone" placeholder="+49 …" />
           </div>
           <div>
-            <label for="email">E-Mail-Adresse <span class="note">*</span></label>
-            <input id="email" type="email" name="email" placeholder="name@example.com" required />
+            <label for="email">E-Mail-Adresse <span style="color:var(--flag-red)">*</span></label>
+            <input id="email" name="email" type="email" required placeholder="name@example.com" />
+            <div class="note" data-err="email"></div>
           </div>
           <div>
-            <label for="city">Adresse (Stadt/Ort) <span class="note">*</span></label>
-            <input id="city" name="city" required />
+            <label for="city">Adresse (Stadt/Ort) <span style="color:var(--flag-red)">*</span></label>
+            <input id="city" name="city" required placeholder="z. B. Düsseldorf" />
+            <div class="note" data-err="city"></div>
           </div>
           <div>
-            <label for="country">Land <span class="note">*</span></label>
-            <input id="country" name="country" value="Deutschland" required />
+            <label for="country">Land <span style="color:var(--flag-red)">*</span></label>
+            <input id="country" name="country" required value="Deutschland" />
+            <div class="note" data-err="country"></div>
           </div>
         </div>
+      </div>
 
-        <!-- 2. Status an der DEO -->
-        <h2>Status an der DEO (ehemalig)</h2>
-        <div class="radio">
-          <label><input type="radio" name="role" value="schueler" checked> Ehemalige/r Schüler/in</label>
-          <label><input type="radio" name="role" value="lehrer"> Ehemalige/r Lehrer/in</label>
-          <label><input type="radio" name="role" value="verwaltung"> Ehemalige/r Verwaltungsbeauftragte/r</label>
+      <!-- Status an der DEO -->
+      <div class="card">
+        <h2 class="section">Status an der DEO (ehemalig)</h2>
+
+        <div class="radio" role="radiogroup" aria-labelledby="role-label" style="margin-top:4px">
+          <span id="role-label" class="muted" style="position:absolute;left:-9999px">Status auswählen</span>
+          <label><input type="radio" name="role" value="schueler" checked /> Ehemalige/r Schüler/in</label>
+          <label><input type="radio" name="role" value="lehrer" /> Ehemalige/r Lehrer/in</label>
+          <label><input type="radio" name="role" value="verwaltung" /> Ehemalige/r Verwaltungsbeauftragte/r</label>
         </div>
 
-        <div class="grid grid-2">
+        <div class="row" style="margin-top:8px">
           <div>
-            <label for="deo_from">Ab wann an der DEO <span class="note">*</span></label>
+            <label for="deo_from">Ab wann an der DEO <span style="color:var(--flag-red)">*</span></label>
             <input id="deo_from" name="deo_from" type="month" required />
+            <div class="note" data-err="deo_from"></div>
           </div>
           <div>
-            <label for="deo_to">Bis wann an der DEO <span class="note">*</span></label>
+            <label for="deo_to">Bis wann an der DEO <span style="color:var(--flag-red)">*</span></label>
             <input id="deo_to" name="deo_to" type="month" required />
+            <div class="note" data-err="deo_to"></div>
           </div>
         </div>
 
-        <!-- rollenspezifische Felder -->
-        <div id="role-extra" style="margin-top:8px">
-          <!-- wird via JS ersetzt -->
-          <label for="classes">Welche Klassen hast Du besucht? <span class="note">*</span></label>
-          <textarea id="classes" name="classes_attended" rows="3" placeholder="z. B. 5a–12b"></textarea>
-        </div>
+        <!-- rollenspezifisch -->
+        <div id="role-extra" style="margin-top:8px"></div>
+      </div>
 
-        <!-- 3. Anmeldung -->
-        <h2>Anmeldung zum VEDEO NRW Treffen</h2>
+      <!-- Anmeldung -->
+      <div class="card">
+        <h2 class="section">Anmeldung zum VEDEO NRW Treffen</h2>
+
         <div class="radio">
-          <label><input type="radio" name="attending" value="ja"> ja</label>
-          <label><input type="radio" name="attending" value="nein"> nein</label>
-          <label><input type="radio" name="attending" value="vielleicht" checked> vielleicht</label>
+          <label><input type="radio" name="attending" value="ja" /> ja</label>
+          <label><input type="radio" name="attending" value="nein" /> nein</label>
+          <label><input type="radio" name="attending" value="vielleicht" /> vielleicht</label>
         </div>
+        <div class="note" data-err="attending"></div>
 
-        <div id="companions-wrap" class="hide">
+        <div id="companions-wrap" style="display:none;margin-top:10px">
           <label for="companions">Wer kommt noch mit (Anzahl der Begleiter)?</label>
           <input id="companions" name="companions" type="number" min="0" value="0" style="max-width:180px" />
+          <div class="note" data-err="companions"></div>
         </div>
+      </div>
 
-        <!-- 4. Zukunft -->
-        <h2>Zukünftige VEDEO Treffen</h2>
-        <div class="grid grid-2">
+      <!-- Zukunft -->
+      <div class="card">
+        <h2 class="section">Zukünftige VEDEO Treffen</h2>
+        <div class="row">
           <div>
-            <label>Interesse an zukünftigen Treffen in NRW? <span class="note">*</span></label>
+            <label>Bist Du an zukünftigen Treffen in NRW interessiert? <span style="color:var(--flag-red)">*</span></label>
             <div class="radio">
-              <label><input type="radio" name="future_interest" value="ja"> ja</label>
-              <label><input type="radio" name="future_interest" value="nein" checked> nein</label>
+              <label><input type="radio" name="future_interest" value="ja" /> ja</label>
+              <label><input type="radio" name="future_interest" value="nein" /> nein</label>
             </div>
+            <div class="note" data-err="future_interest"></div>
           </div>
           <div>
             <label for="future_locations">Wo sonst in der Welt sollte VEDEO Treffen organisieren?</label>
             <input id="future_locations" name="future_locations" placeholder="z. B. Kairo, Berlin, Dubai …" />
           </div>
         </div>
+      </div>
 
-        <!-- 5. Datenschutz -->
-        <h2>Datenschutz</h2>
-        <label style="display:flex; gap:10px; align-items:flex-start;">
-          <input id="consent" name="consent" type="checkbox" required>
-          <span>
-            Ich stimme zu, dass meine Angaben zur Organisation des Treffens gespeichert und verarbeitet werden.
-            <span class="note"><br>Hinweis: Die Daten werden ausschließlich für die Planung und Kommunikation im Rahmen des VEDEO NRW Treffens verwendet.</span>
-          </span>
+      <!-- Datenschutz -->
+      <div class="card">
+        <h2 class="section">Datenschutz</h2>
+        <label class="radio" style="align-items:flex-start">
+          <input id="consent" name="consent" type="checkbox" required />
+          <span>Ich stimme zu, dass meine Angaben zur Organisation des Treffens gespeichert und verarbeitet werden.
+            <span style="color:var(--flag-red)">*</span></span>
         </label>
+        <div class="note" data-err="consent"></div>
+        <p class="muted" style="margin-top:8px">
+          Hinweis: Die Daten werden ausschließlich für Planung und Kommunikation im Rahmen des VEDEO NRW Treffens verwendet.
+        </p>
+      </div>
 
-        <!-- Buttons -->
-        <div class="actions">
-          <button class="btn" type="submit">E-Mail direkt senden</button>
-          <button class="btn secondary" type="reset">Zurücksetzen</button>
-        </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button type="submit" class="btn primary">E-Mail direkt senden</button>
+        <button type="button" id="btnJson" class="btn">Daten als JSON herunterladen</button>
+        <button type="reset" class="btn">Zurücksetzen</button>
+      </div>
+    </form>
 
-        <div id="ok" class="ok">Danke! Deine Angaben wurden gesendet.</div>
-        <div id="err" class="error">Leider gab es beim Senden ein Problem.</div>
-      </form>
-    </section>
-
-    <footer>
-      <div>© <span id="y"></span> VEDEO NRW – Treffen Düsseldorf, 11.10.2025</div>
-      <div class="watermark">🐺 watermark</div>
-    </footer>
+    <footer>© <span id="y"></span> VEDEO NRW – Treffen Düsseldorf, 11.10.2025</footer>
   </div>
 
   <script>
-    // kleine Hilfe-Funktion
-    const $  = (sel) => document.querySelector(sel);
+    // Erfolgshinweis (bei Redirect /?success=1)
+    (function () {
+      const p = new URLSearchParams(location.search);
+      if (p.get("success") === "1") document.getElementById("ok").style.display = "block";
+      document.getElementById("y").textContent = new Date().getFullYear();
+    })();
 
-    // Jahr in Footer
-    $('#y').textContent = new Date().getFullYear();
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+    const err = (k, msg) => { const el = document.querySelector(`[data-err="${k}"]`); if (el) el.textContent = msg || ""; };
 
-    // Rollenspezifische Felder dynamisch rendern
+    // rollenspezifische Felder
     function renderRoleExtra(){
       const role = document.querySelector('input[name="role"]:checked').value;
-      const wrap = $('#role-extra');
-
-      if(role === 'schueler'){
+      const wrap = $("#role-extra");
+      if(role === "schueler"){
         wrap.innerHTML = `
-          <label for="classes">Welche Klassen hast Du besucht? <span class="note">*</span></label>
+          <label for="classes">Welche Klassen hast Du besucht? <span style="color:var(--flag-red)">*</span></label>
           <textarea id="classes" name="classes_attended" rows="3" placeholder="z. B. 5a–12b" required></textarea>
-        `;
-      } else if(role === 'lehrer'){
+          <div class="note" data-err="classes"></div>`;
+      } else if(role === "lehrer"){
         wrap.innerHTML = `
-          <label for="subjects">Welche Fächer & Klassen hast Du gelehrt? <span class="note">*</span></label>
+          <label for="subjects">Welche Fächer & Klassen hast Du gelehrt? <span style="color:var(--flag-red)">*</span></label>
           <textarea id="subjects" name="subjects_taught" rows="3" placeholder="z. B. Mathe (5–9), Physik (10–12)" required></textarea>
-        `;
+          <div class="note" data-err="subjects"></div>`;
       } else {
         wrap.innerHTML = `
-          <label for="dept">In welcher Abteilung hast Du gearbeitet? <span class="note">*</span></label>
-          <input id="dept" name="dept" placeholder="z. B. Sekretariat, Verwaltung, Technik" required/>
-        `;
+          <label for="dept">In welcher Abteilung hast Du gearbeitet? <span style="color:var(--flag-red)">*</span></label>
+          <input id="dept" name="dept" placeholder="z. B. Sekretariat, Verwaltung, Technik" required />
+          <div class="note" data-err="dept"></div>`;
       }
     }
-    document.querySelectorAll('input[name="role"]').forEach(r =>
-      r.addEventListener('change', renderRoleExtra)
-    );
-    renderRoleExtra(); // initial
+    $$('.radio input[name="role"]').forEach(r => r.addEventListener('change', renderRoleExtra));
+    renderRoleExtra();
 
-    // Begleiter nur zeigen wenn "ja"
+    // Begleiterfeld nur bei "ja"
     function toggleCompanions(){
-      const v = document.querySelector('input[name="attending"]:checked')?.value || '';
-      $('#companions-wrap').classList.toggle('hide', v !== 'ja');
+      const v = document.querySelector('input[name="attending"]:checked')?.value || "";
+      $("#companions-wrap").style.display = (v === "ja") ? "block" : "none";
     }
-    document.querySelectorAll('input[name="attending"]').forEach(r =>
-      r.addEventListener('change', toggleCompanions)
-    );
+    $$('input[name="attending"]').forEach(r => r.addEventListener('change', toggleCompanions));
     toggleCompanions();
 
-    // Optional: nach Absenden Erfolg/Fehler Meldung anzeigen (progressive enhancement)
-    $('#form').addEventListener('submit', function(){
-      // Netlify steuert das Redirecting; wir zeigen kurz eine Meldung,
-      // falls die Seite im selben Kontext bleibt
-      $('#ok').style.display = 'block';
-      setTimeout(()=>{ $('#ok').style.display = 'none'; }, 4000);
+    // Validierung (leicht & verständlich, ergänzt HTML5-Checks)
+    function validate(){
+      let ok = true;
+
+      const name = $('#name').value.trim();
+      const email = $('#email').value.trim();
+      const city = $('#city').value.trim();
+      const country = $('#country').value.trim();
+      const from = $('#deo_from').value;
+      const to = $('#deo_to').value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+      const attending = document.querySelector('input[name="attending"]:checked')?.value || '';
+      const future_interest = document.querySelector('input[name="future_interest"]:checked')?.value || '';
+      const consent = $('#consent').checked;
+
+      err('name', name ? '' : 'Bitte Name eintragen.'); ok &&= !!name;
+      err('email', email ? '' : 'Bitte E-Mail eintragen.'); ok &&= !!email;
+      err('city', city ? '' : 'Bitte Stadt/Ort eintragen.'); ok &&= !!city;
+      err('country', country ? '' : 'Bitte Land eintragen.'); ok &&= !!country;
+      err('deo_from', from ? '' : 'Bitte Startmonat/-jahr angeben.'); ok &&= !!from;
+      err('deo_to', to ? '' : 'Bitte Endmonat/-jahr angeben.'); ok &&= !!to;
+
+      // rollenspezifisch
+      if(role === 'schueler'){
+        const v = $('#classes')?.value.trim() || '';
+        err('classes', v ? '' : 'Bitte besuchte Klassen eintragen.'); ok &&= !!v;
+      }else if(role === 'lehrer'){
+        const v = $('#subjects')?.value.trim() || '';
+        err('subjects', v ? '' : 'Bitte Fächer & Klassen eintragen.'); ok &&= !!v;
+      }else{
+        const v = $('#dept')?.value.trim() || '';
+        err('dept', v ? '' : 'Bitte Abteilung eintragen.'); ok &&= !!v;
+      }
+
+      err('attending', attending ? '' : 'Bitte auswählen, ob du kommst.'); ok &&= !!attending;
+      if(attending === 'ja'){
+        const c = Number($('#companions').value);
+        const good = Number.isFinite(c) && c >= 0;
+        err('companions', good ? '' : 'Bitte Anzahl Begleiter als Zahl (≥ 0).');
+        ok &&= good;
+      }
+
+      err('future_interest', future_interest ? '' : 'Bitte Auswahl treffen.'); ok &&= !!future_interest;
+      err('consent', consent ? '' : 'Bitte Zustimmung erteilen.'); ok &&= !!consent;
+
+      return ok;
+    }
+
+    // JSON Download
+    function collectData(){
+      const role = document.querySelector('input[name="role"]:checked').value;
+      return {
+        name:$('#name').value.trim(),
+        phone:$('#phone').value.trim(),
+        email:$('#email').value.trim(),
+        city:$('#city').value.trim(),
+        country:$('#country').value.trim(),
+        deo_from:$('#deo_from').value, deo_to:$('#deo_to').value,
+        role,
+        classes_attended: role==='schueler' ? ($('#classes')?.value.trim()||'') : '',
+        subjects_taught: role==='lehrer' ? ($('#subjects')?.value.trim()||'') : '',
+        dept: role==='verwaltung' ? ($('#dept')?.value.trim()||'') : '',
+        attending: document.querySelector('input[name="attending"]:checked')?.value || '',
+        companions: Number($('#companions')?.value||0),
+        future_interest: document.querySelector('input[name="future_interest"]:checked')?.value || '',
+        future_locations: $('#future_locations').value.trim(),
+        consent: $('#consent').checked
+      };
+    }
+    $('#btnJson').addEventListener('click', () => {
+      const data = collectData();
+      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `vedeo-nrw-anmeldung-${(data.name||'unbekannt').replace(/\s+/g,'_')}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Submit – vor dem nativen Netlify-POST kurz validieren
+    $('#form').addEventListener('submit', (e)=>{
+      if(!validate()){
+        e.preventDefault();
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
     });
   </script>
 </body>
 </html>
-
