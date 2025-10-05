@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VEDEO NRW – Admin</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f8fafc;color:#0f172a}
+    header{background:#0f172a;color:#fff;padding:16px 20px}
+    h1{margin:0;font-size:20px}
+    main{max-width:1100px;margin:20px auto;padding:0 16px}
+    .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
+    input[type=password]{border:1px solid #e2e8f0;border-radius:8px;padding:8px 10px}
+    button{padding:8px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;cursor:pointer}
+    button.primary{background:#2563eb;color:#fff;border-color:#2563eb}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
+    thead{background:#f1f5f9}
+    th,td{font-size:14px;padding:10px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+    tr:hover td{background:#fafafa}
+    .muted{color:#64748b;font-size:12px}
+    .err{color:#b91c1c}
+  </style>
+</head>
+<body>
+  <header><h1>VEDEO NRW – Admin</h1></header>
+  <main>
+    <div class="bar">
+      <input id="pw" type="password" placeholder="Admin-Passwort (optional)" />
+      <button id="unlock" class="primary">Öffnen</button>
+      <button id="reload">Neu laden</button>
+      <button id="csv">Als CSV exportieren</button>
+      <span id="count" class="muted"></span>
+    </div>
+    <div id="msg" class="muted"></div>
+
+    <div style="overflow:auto;">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Name / E-Mail</th>
+            <th>Kontakt</th>
+            <th>Adresse</th>
+            <th>DEO</th>
+            <th>Rolle / Details</th>
+            <th>Teilnahme</th>
+            <th>Future</th>
+          </tr>
+        </thead>
+        <tbody><tr><td colspan="8" class="muted">Noch keine Daten geladen.</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const $ = (s)=>document.querySelector(s);
+    const toDate = (iso)=> new Date(iso).toLocaleString();
+    let unlocked = false;
+    const LOCAL_HASH = "sha256:replace-me"; // optionaler Client-„Schutz“; für echten Schutz später Netlify Identity nutzen
+
+    async function checkPassword(pass) {
+      if (LOCAL_HASH === "sha256:replace-me") return true; // kein Passwort gesetzt
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass));
+      const hex = [...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,'0')).join('');
+      return ("sha256:"+hex) === LOCAL_HASH;
+    }
+
+    $('#unlock').addEventListener('click', async ()=>{
+      const pass = $('#pw').value;
+      if (await checkPassword(pass)) { unlocked = true; $('#msg').textContent=''; load(); }
+      else { $('#msg').textContent='Falsches Passwort.'; $('#msg').className='err'; }
+    });
+
+    $('#reload').addEventListener('click', ()=>{ if (unlocked || LOCAL_HASH==="sha256:replace-me") load(); });
+
+    $('#csv').addEventListener('click', ()=>{
+      const rows = window._rows || [];
+      if (!rows.length) return;
+      const cols = ["created_at","name","email","phone","city","country","role","deo_from","deo_to","classes_attended","subjects_taught","dept","attending","companions","future_interest","future_locations","consent"];
+      const head = cols.join(',');
+      const lines = rows.map(r => cols.map(k => `"${String(r[k]??'').replace(/"/g,'""')}"`).join(','));
+      const csv = [head, ...lines].join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'vedeo-nrw-submissions.csv';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    async function load(){
+      $('#msg').className='muted'; $('#msg').textContent='Lade…';
+      $('#tbl tbody').innerHTML = `<tr><td colspan="8" class="muted">Lade Daten…</td></tr>`;
+      try{
+        const res = await fetch('/.netlify/functions/list-submissions');
+        if(!res.ok){ throw new Error(await res.text()); }
+        const rows = await res.json();
+        window._rows = rows;
+        $('#count').textContent = rows.length + ' Einträge';
+        if(!rows.length){
+          $('#tbl tbody').innerHTML = `<tr><td colspan="8" class="muted">Noch keine Einreichungen.</td></tr>`;
+        } else {
+          $('#tbl tbody').innerHTML = rows.map(r => `
+            <tr>
+              <td>${toDate(r.created_at)}</td>
+              <td><b>${escapeHtml(r.name)}</b><br><span class="muted">${escapeHtml(r.email)}</span></td>
+              <td>${escapeHtml(r.phone||'–')}</td>
+              <td>${escapeHtml(r.city||'')}${r.country? ', '+escapeHtml(r.country):''}</td>
+              <td>${escapeHtml(r.deo_from||'–')} → ${escapeHtml(r.deo_to||'–')}</td>
+              <td>
+                ${escapeHtml(r.role||'–')}
+                ${r.classes_attended ? '<br><span class="muted">Klassen: '+escapeHtml(r.classes_attended)+'</span>':''}
+                ${r.subjects_taught ? '<br><span class="muted">Fächer: '+escapeHtml(r.subjects_taught)+'</span>':''}
+                ${r.dept ? '<br><span class="muted">Abt.: '+escapeHtml(r.dept)+'</span>':''}
+              </td>
+              <td>${escapeHtml(r.attending||'–')}${r.companions? ' ('+escapeHtml(String(r.companions))+')':''}</td>
+              <td>${escapeHtml(r.future_interest||'–')}${r.future_locations? '<br><span class="muted">'+escapeHtml(r.future_locations)+'</span>':''}</td>
+            </tr>
+          `).join('');
+        }
+        $('#msg').textContent='';
+      }catch(e){
+        $('#msg').className='err';
+        $('#msg').textContent='Fehler: '+e.message;
+      }
+    }
+
+    if (LOCAL_HASH === "sha256:replace-me") { unlocked = true; load(); }
+  </script>
+</body>
+</html>
