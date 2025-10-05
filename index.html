@@ -10,7 +10,6 @@
     :root{
       --flag-black:#000; --flag-red:#dd0000; --flag-gold:#ffce00;
       --bg:#f7f7f8; --text:#1f2937; --muted:#6b7280; --card:#fff; --border:#e5e7eb;
-      --primary:#0f766e; --primary-700:#0b5f59; --danger:#dc2626;
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);
@@ -25,30 +24,19 @@
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin:16px 0}
     .section{color:var(--flag-red);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px;margin:0 0 12px 0}
     label{display:block;font-size:14px;font-weight:600;margin:10px 0 6px}
-    input,select,textarea{
-      width:100%;padding:11px;border:1px solid var(--border);border-radius:12px;background:#fff}
+    input,select,textarea{width:100%;padding:11px;border:1px solid var(--border);border-radius:12px;background:#fff}
     input:focus,textarea:focus,select:focus{border-color:var(--flag-red);outline:none;box-shadow:0 0 0 2px #ffce0033}
     .row{display:grid;gap:12px}
     @media (min-width:768px){ .row{grid-template-columns:1fr 1fr} }
-
     .radio{display:flex;gap:14px;flex-wrap:wrap}
     .note{font-size:12px;color:#9b1c1c;margin-top:4px;min-height:1.25em}
-
     .btn{appearance:none;border:1px solid var(--border);background:#fff;padding:10px 16px;border-radius:12px;cursor:pointer}
     .btn:hover{background:#fafafa}
     .btn.primary{background:var(--flag-red);color:#fff;border-color:var(--flag-red)}
     .btn.primary:hover{filter:brightness(.96)}
     .muted{font-size:12px;color:var(--muted)}
-    .success{background:#ecfdf5;border:1px solid #065f46;padding:12px;border-radius:10px;margin:16px 0;color:#065f46}
-
     footer{margin:24px 0;color:var(--muted);text-align:center;font-size:12px}
-
-    /* dezentes Wasserzeichen unten rechts */
-    body::after{
-      content:"⩥ WOLF ᴏʀ ᴅɪᴇ 💀"; 
-      position:fixed; right:14px; bottom:10px; 
-      font-size:11px; letter-spacing:.25em; color:#9ca3af55; user-select:none; pointer-events:none
-    }
+    body::after{content:"⩥ WOLF ᴏʀ ᴅɪᴇ 💀"; position:fixed; right:14px; bottom:10px; font-size:11px; letter-spacing:.25em; color:#9ca3af55; user-select:none; pointer-events:none}
   </style>
 </head>
 <body>
@@ -56,28 +44,14 @@
     <header class="hero">
       <div class="inner">
         <h1>VEDEO NRW – Anmeldung</h1>
-        <p class="subtitle">
-          Einladung zum VEDEO NRW Treffen am <b>Samstag, 11. Oktober 2025</b> in <b>Düsseldorf</b>.
-        </p>
+        <p class="subtitle">Einladung zum <b>Samstag, 11. Oktober 2025</b> in <b>Düsseldorf</b>.</p>
       </div>
     </header>
 
-    <!-- Erfolgshinweis bei Redirect /?success=1 -->
-    <div id="ok" class="success" style="display:none">
-      <b>Danke!</b> Deine Angaben wurden übermittelt und erscheinen im Netlify-Formularbereich.
-    </div>
-
-    <!--
-      NETLIFY FORMS
-      - name="anmeldung" ist der Formularname, unter dem Submissions im Netlify-Dashboard auftauchen
-      - data-netlify="true" aktiviert das Parsen
-      - netlify-honeypot="bot-field" ist eine Spam-Falle
-      - verstecktes input form-name muss den gleichen Namen wie das Formular tragen
-      - action="/?success=1" leitet nach erfolgreicher Sub­mission auf dieselbe Seite mit Erfolgshinweis
-    -->
+    <!-- WICHTIG: Netlify-Form (mit eigener Danke-Seite) -->
     <form id="form" name="anmeldung" method="POST"
           data-netlify="true" netlify-honeypot="bot-field"
-          action="/?success=1" novalidate>
+          action="/thanks.html" novalidate>
       <input type="hidden" name="form-name" value="anmeldung" />
       <p style="display:none">
         <label>Bitte frei lassen: <input name="bot-field" /></label>
@@ -204,34 +178,28 @@
   </div>
 
   <script>
-    // Erfolgshinweis (bei Redirect /?success=1)
-    (function () {
-      const p = new URLSearchParams(location.search);
-      if (p.get("success") === "1") document.getElementById("ok").style.display = "block";
-      document.getElementById("y").textContent = new Date().getFullYear();
-    })();
-
-    const $ = (sel) => document.querySelector(sel);
+    const $  = (sel) => document.querySelector(sel);
     const $$ = (sel) => document.querySelectorAll(sel);
     const err = (k, msg) => { const el = document.querySelector(`[data-err="${k}"]`); if (el) el.textContent = msg || ""; };
+    document.getElementById("y").textContent = new Date().getFullYear();
 
-    // rollenspezifische Felder
+    // Rollenspezifische Felder
     function renderRoleExtra(){
       const role = document.querySelector('input[name="role"]:checked').value;
       const wrap = $("#role-extra");
       if(role === "schueler"){
         wrap.innerHTML = `
-          <label for="classes">Welche Klassen hast Du besucht? <span style="color:var(--flag-red)">*</span></label>
+          <label for="classes">Welche Klassen hast Du besucht? <span style="color:#dd0000">*</span></label>
           <textarea id="classes" name="classes_attended" rows="3" placeholder="z. B. 5a–12b" required></textarea>
           <div class="note" data-err="classes"></div>`;
       } else if(role === "lehrer"){
         wrap.innerHTML = `
-          <label for="subjects">Welche Fächer & Klassen hast Du gelehrt? <span style="color:var(--flag-red)">*</span></label>
+          <label for="subjects">Welche Fächer & Klassen hast Du gelehrt? <span style="color:#dd0000">*</span></label>
           <textarea id="subjects" name="subjects_taught" rows="3" placeholder="z. B. Mathe (5–9), Physik (10–12)" required></textarea>
           <div class="note" data-err="subjects"></div>`;
       } else {
         wrap.innerHTML = `
-          <label for="dept">In welcher Abteilung hast Du gearbeitet? <span style="color:var(--flag-red)">*</span></label>
+          <label for="dept">In welcher Abteilung hast Du gearbeitet? <span style="color:#dd0000">*</span></label>
           <input id="dept" name="dept" placeholder="z. B. Sekretariat, Verwaltung, Technik" required />
           <div class="note" data-err="dept"></div>`;
       }
@@ -247,58 +215,41 @@
     $$('input[name="attending"]').forEach(r => r.addEventListener('change', toggleCompanions));
     toggleCompanions();
 
-    // Validierung (leicht & verständlich, ergänzt HTML5-Checks)
-    function validate(){
+    // Leichte Vorvalidierung – blockt nur bei Fehlern (damit Netlify den POST annehmen kann)
+    $('#form').addEventListener('submit', (e)=>{
       let ok = true;
-
-      const name = $('#name').value.trim();
-      const email = $('#email').value.trim();
-      const city = $('#city').value.trim();
-      const country = $('#country').value.trim();
-      const from = $('#deo_from').value;
-      const to = $('#deo_to').value;
-      const role = document.querySelector('input[name="role"]:checked').value;
-      const attending = document.querySelector('input[name="attending"]:checked')?.value || '';
-      const future_interest = document.querySelector('input[name="future_interest"]:checked')?.value || '';
-      const consent = $('#consent').checked;
-
-      err('name', name ? '' : 'Bitte Name eintragen.'); ok &&= !!name;
-      err('email', email ? '' : 'Bitte E-Mail eintragen.'); ok &&= !!email;
-      err('city', city ? '' : 'Bitte Stadt/Ort eintragen.'); ok &&= !!city;
-      err('country', country ? '' : 'Bitte Land eintragen.'); ok &&= !!country;
-      err('deo_from', from ? '' : 'Bitte Startmonat/-jahr angeben.'); ok &&= !!from;
-      err('deo_to', to ? '' : 'Bitte Endmonat/-jahr angeben.'); ok &&= !!to;
+      const need = [
+        ['name','Bitte Name eintragen.'],
+        ['email','Bitte E-Mail eintragen.'],
+        ['city','Bitte Stadt/Ort eintragen.'],
+        ['country','Bitte Land eintragen.'],
+        ['deo_from','Bitte Startmonat/-jahr angeben.'],
+        ['deo_to','Bitte Endmonat/-jahr angeben.']
+      ];
+      need.forEach(([id,msg])=>{
+        const v = document.getElementById(id)?.value?.trim();
+        err(id, v ? '' : msg); ok &&= !!v;
+      });
 
       // rollenspezifisch
-      if(role === 'schueler'){
-        const v = $('#classes')?.value.trim() || '';
-        err('classes', v ? '' : 'Bitte besuchte Klassen eintragen.'); ok &&= !!v;
-      }else if(role === 'lehrer'){
-        const v = $('#subjects')?.value.trim() || '';
-        err('subjects', v ? '' : 'Bitte Fächer & Klassen eintragen.'); ok &&= !!v;
-      }else{
-        const v = $('#dept')?.value.trim() || '';
-        err('dept', v ? '' : 'Bitte Abteilung eintragen.'); ok &&= !!v;
-      }
+      const role = document.querySelector('input[name="role"]:checked')?.value;
+      if(role==='schueler'){ ok &&= !!document.getElementById('classes')?.value?.trim(); if(!ok) err('classes','Bitte besuchte Klassen eintragen.'); }
+      if(role==='lehrer'){ ok &&= !!document.getElementById('subjects')?.value?.trim(); if(!ok) err('subjects','Bitte Fächer & Klassen eintragen.'); }
+      if(role==='verwaltung'){ ok &&= !!document.getElementById('dept')?.value?.trim(); if(!ok) err('dept','Bitte Abteilung eintragen.'); }
 
-      err('attending', attending ? '' : 'Bitte auswählen, ob du kommst.'); ok &&= !!attending;
-      if(attending === 'ja'){
-        const c = Number($('#companions').value);
-        const good = Number.isFinite(c) && c >= 0;
-        err('companions', good ? '' : 'Bitte Anzahl Begleiter als Zahl (≥ 0).');
-        ok &&= good;
-      }
+      const ai = document.querySelector('input[name="attending"]:checked'); ok &&= !!ai; if(!ai) err('attending','Bitte auswählen, ob du kommst.');
 
-      err('future_interest', future_interest ? '' : 'Bitte Auswahl treffen.'); ok &&= !!future_interest;
-      err('consent', consent ? '' : 'Bitte Zustimmung erteilen.'); ok &&= !!consent;
+      const fi = document.querySelector('input[name="future_interest"]:checked'); ok &&= !!fi; if(!fi) err('future_interest','Bitte Auswahl treffen.');
 
-      return ok;
-    }
+      const consent = document.getElementById('consent').checked; ok &&= consent; if(!consent) err('consent','Bitte Zustimmung erteilen.');
 
-    // JSON Download
-    function collectData(){
-      const role = document.querySelector('input[name="role"]:checked').value;
-      return {
+      if(!ok){ e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); }
+    });
+
+    // JSON Download (lokal für dich)
+    document.getElementById('btnJson').addEventListener('click', ()=>{
+      const role = document.querySelector('input[name="role"]:checked')?.value;
+      const data = {
         name:$('#name').value.trim(),
         phone:$('#phone').value.trim(),
         email:$('#email').value.trim(),
@@ -310,29 +261,16 @@
         subjects_taught: role==='lehrer' ? ($('#subjects')?.value.trim()||'') : '',
         dept: role==='verwaltung' ? ($('#dept')?.value.trim()||'') : '',
         attending: document.querySelector('input[name="attending"]:checked')?.value || '',
-        companions: Number($('#companions')?.value||0),
+        companions: Number(document.getElementById('companions')?.value||0),
         future_interest: document.querySelector('input[name="future_interest"]:checked')?.value || '',
-        future_locations: $('#future_locations').value.trim(),
-        consent: $('#consent').checked
+        future_locations: document.getElementById('future_locations').value.trim(),
+        consent: document.getElementById('consent').checked
       };
-    }
-    $('#btnJson').addEventListener('click', () => {
-      const data = collectData();
-      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = `vedeo-nrw-anmeldung-${(data.name||'unbekannt').replace(/\s+/g,'_')}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-
-    // Submit – vor dem nativen Netlify-POST kurz validieren
-    $('#form').addEventListener('submit', (e)=>{
-      if(!validate()){
-        e.preventDefault();
-        window.scrollTo({top:0,behavior:'smooth'});
-      }
+      a.href=url; a.download=`vedeo-nrw-anmeldung-${(data.name||'unbekannt').replace(/\s+/g,'_')}.json`;
+      a.click(); URL.revokeObjectURL(url);
     });
   </script>
 </body>
