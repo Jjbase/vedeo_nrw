@@ -35,7 +35,7 @@
     .note{font-size:12px;color:#b91c1c;margin-top:4px;min-height:1em}
     .muted{font-size:12px;color:var(--muted)}
     .success{background:var(--okbg);border:1px solid var(--okbd);color:var(--oktx);padding:12px;border-radius:12px;margin-top:12px;display:none}
-    .errorbox{background:var(--errbg);border:1px solid var(--errbd);color:var(--errtx);padding:12px;border-radius:12px;margin-top:12px;display:none}
+    .errorbox{background:var(--errbg);border:1px solid var(--errbd);color:var(--errtx);padding:12px;border-radius:12px;margin-top:12px;display:none;white-space:pre-wrap}
     footer{margin:24px 0;color:var(--muted);text-align:center;font-size:12px}
     /* Watermark Wolf */
     body.watermark::after{
@@ -51,10 +51,18 @@
     }
   </style>
 
-  <!-- EmailJS -->
+  <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    (function(){ emailjs.init({ publicKey: "zDD7orGMXdGPSE7gC" }); })();
+    // ========== EmailJS KONFIG (HIER ggf. DEINEN SERVICE NAMEN ÄNDERN) ==========
+    const EMAILJS_PUBLIC_KEY  = "zDD7orGMXdGPSE7gC";     // dein Public Key
+    const EMAILJS_SERVICE_ID  = "service_etifure";       // TODO: falls dein Service anders heißt, HIER anpassen
+    const EMAILJS_TEMPLATE_ID = "template_udhy4bf";      // deine Template ID
+
+    (function(){
+      try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); }
+      catch(e){ console.warn("EmailJS init fehlgeschlagen:", e); }
+    })();
   </script>
 </head>
 <body class="watermark">
@@ -283,11 +291,18 @@
         companions: $('companions-wrap').style.display==='block' ? String($('companions').value||'0') : '0',
         future_interest: document.querySelector('input[name="future_interest"]:checked')?.value || '',
         future_locations: $('future_locations').value.trim(),
-        consent: $('consent').checked ? 'Ja' : 'Nein'
+        consent: $('consent').checked ? 'Ja' : 'Nein',
+        // Falls dein Template {{message}} erwartet, kannst du hier extra eine Nachricht anhängen:
+        message: ''
       };
 
       try{
-        await emailjs.send("service_etifure", "template_udhy4bf", params);
+        // Sicherheit: IDs geprüft?
+        if(!EMAILJS_PUBLIC_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID){
+          throw new Error("EmailJS-Konfiguration unvollständig (Public Key / Service ID / Template ID).");
+        }
+
+        const res = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
         $('ok').style.display = 'block';
         $('errBox').style.display = 'none';
         e.target.reset();
@@ -295,7 +310,8 @@
         $('companions-wrap').style.display = 'none';
       }catch(err){
         $('errBox').style.display = 'block';
-        $('errBox').textContent = "Fehler beim Senden: " + (err?.text || err?.message || err);
+        $('errBox').textContent = "Fehler beim Senden: " + (err?.text || err?.message || JSON.stringify(err));
+        console.error("EmailJS error:", err);
       }finally{
         btn.disabled = false; btn.textContent = prev;
       }
