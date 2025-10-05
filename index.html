@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>VEDEO NRW – Anmeldung (11.10.2025 Düsseldorf)</title>
   <meta name="description" content="Landing Page für das VEDEO NRW Treffen am 11. Oktober 2025 in Düsseldorf.">
+
   <style>
     :root{
       --flag-black:#000; --flag-red:#dd0000; --flag-gold:#ffce00;
@@ -13,17 +14,24 @@
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
     .container{max-width:920px;margin:0 auto;padding:24px}
+
+    /* Hero mit Deutschlandfarben */
     header.hero{border-radius:18px;overflow:hidden;margin:24px 0;background:linear-gradient(90deg,var(--flag-black) 0 33%, var(--flag-red) 33% 66%, var(--flag-gold) 66% 100%)}
     header.hero .inner{background:rgba(255,255,255,.94);padding:28px 24px}
+
     h1{margin:0 0 6px 0;font-size:clamp(24px,4vw,34px);font-weight:800}
     .subtitle{color:var(--muted);margin:0}
+
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin:16px 0;box-shadow:0 1px 0 rgba(0,0,0,.03)}
     h2.section{color:var(--flag-red);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:3px;margin:0 0 10px 0}
+
     label{display:block;font-size:14px;font-weight:600;margin-top:10px}
     input,textarea,select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:white;margin-top:6px;font-size:15px;outline:none}
     input:focus,textarea:focus,select:focus{border-color:var(--flag-red);box-shadow:0 0 0 3px #ffce0055}
+
     .row{display:grid;grid-template-columns:1fr;gap:12px}
     @media(min-width:760px){ .row{grid-template-columns:1fr 1fr} }
+
     .radio{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
     .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
     .btn{padding:10px 14px;border-radius:12px;border:1px solid var(--border);background:white;cursor:pointer;font-weight:700}
@@ -33,9 +41,32 @@
     .muted{font-size:12px;color:var(--muted)}
     .success{background:#ecfdf5;border:1px solid #10b98130;color:#065f46;padding:12px;border-radius:12px;margin-top:12px}
     footer{margin:24px 0;color:var(--muted);text-align:center;font-size:12px}
+
+    /* ====== Watermark (Totenkopf) – dezent unten rechts ====== */
+    body.watermark::after{
+      content:"";
+      position:fixed;
+      right:14px; bottom:14px;
+      width:90px; height:90px;
+      opacity:.08;               /* Helligkeit des Wasserzeichens */
+      pointer-events:none;       /* Klicks nicht blockieren */
+      background-repeat:no-repeat;
+      background-size:contain;
+      /* Inline-SVG (Skull) als Data-URL – keine externen Dateien nötig */
+      background-image:url("data:image/svg+xml;utf8,\
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>\
+          <g fill='none' stroke='%23000' stroke-width='4' opacity='0.8'>\
+            <circle cx='64' cy='52' r='36' fill='%23ffffff'/>\
+            <circle cx='48' cy='48' r='9' fill='%23000'/>\
+            <circle cx='80' cy='48' r='9' fill='%23000'/>\
+            <path d='M64 64 c-8 0-16 6-16 14 v10 h32 V78 c0-8-8-14-16-14z' fill='%23000'/>\
+            <path d='M40 86 v14 M88 86 v14 M28 92 v10 M100 92 v10'/>\
+          </g>\
+        </svg>");
+    }
   </style>
 </head>
-<body>
+<body class="watermark">
   <div class="container">
     <header class="hero">
       <div class="inner">
@@ -60,7 +91,8 @@
           </div>
           <div>
             <label for="email">E-Mail-Adresse <span style="color:var(--flag-red)">*</span></label>
-            <input id="email" type="email" required placeholder="name@example.com">
+            <!-- robustes E-Mail-Feld -->
+            <input id="email" type="email" inputmode="email" autocomplete="email" required placeholder="name@example.com">
             <div class="note" data-err="email"></div>
           </div>
           <div>
@@ -133,7 +165,7 @@
           </div>
           <div>
             <label for="future_locations">Wo sonst in der Welt sollte VEDEO Treffen organisieren?</label>
-            <input id="future_locations" placeholder="z. B. Kairo, Berlin, Dubai …">
+            <input id="future_locations" type="text" placeholder="z. B. Kairo, Berlin, Dubai …">
           </div>
         </div>
       </div>
@@ -176,7 +208,7 @@
           <textarea id="subjects" rows="3" placeholder="z. B. Mathe (5–9), Physik (10–12)"></textarea><div class="note" data-err="subjects"></div>';
       }else{
         wrap.innerHTML = '<label for="dept">In welcher Abteilung hast Du gearbeitet? <span style="color:#dd0000">*</span></label>\
-          <input id="dept" placeholder="z. B. Sekretariat, Verwaltung, Technik"><div class="note" data-err="dept"></div>';
+          <input id="dept" type="text" placeholder="z. B. Sekretariat, Verwaltung, Technik"><div class="note" data-err="dept"></div>';
       }
     }
     document.querySelectorAll('input[name="role"]').forEach(r=>r.addEventListener('change', renderRoleExtra));
@@ -184,16 +216,16 @@
 
     // Begleiter sichtbar wenn "ja"
     document.querySelectorAll('input[name="attending"]').forEach(r=>r.addEventListener('change', ()=>{
-      $('companions-wrap').style.display = (r.checked && r.value==='ja') ? 'block' : $('companions-wrap').style.display;
       const v = document.querySelector('input[name="attending"]:checked')?.value;
       $('companions-wrap').style.display = (v==='ja') ? 'block' : 'none';
     }));
 
-    // Validierung
+    // ------ ROBUSTE VALIDIERUNG (mit Browser-Check fürs E-Mail-Feld) ------
     function validate(){
       let ok = true;
+
       const name = $('name').value.trim();
-      const email = $('email').value.trim();
+      const emailEl = $('email'); emailEl.value = emailEl.value.trim();  // Auto-Trim
       const city = $('city').value.trim();
       const country = $('country').value.trim();
       const deo_from = $('deo_from').value;
@@ -203,29 +235,38 @@
       const future_interest = document.querySelector('input[name="future_interest"]:checked')?.value || '';
       const consent = $('consent').checked;
 
-      err('name', name? '':'Bitte Name eintragen.');             ok &&= !!name;
-      err('email', email? (/^\\S+@\\S+\\.\\S+$/.test(email)?'':'Ungültige E-Mail-Adresse.'):'Bitte E-Mail eintragen.'); ok &&= !!email && /^\\S+@\\S+\\.\\S+$/.test(email);
-      err('city', city? '':'Bitte Stadt/Ort eintragen.');         ok &&= !!city;
-      err('country', country? '':'Bitte Land eintragen.');        ok &&= !!country;
-      err('deo_from', deo_from? '':'Bitte Startmonat/-jahr angeben.'); ok &&= !!deo_from;
-      err('deo_to', deo_to? '':'Bitte Endmonat/-jahr angeben.');  ok &&= !!deo_to;
+      err('name', name? '' : 'Bitte Name eintragen.'); ok &&= !!name;
 
-      if(role==='schueler'){ const v = $('classes').value.trim(); err('classes', v? '':'Bitte besuchte Klassen eintragen.'); ok &&= !!v; }
-      if(role==='lehrer'){ const v = $('subjects').value.trim(); err('subjects', v? '':'Bitte Fächer & Klassen eintragen.'); ok &&= !!v; }
-      if(role==='verwaltung'){ const v = $('dept').value.trim(); err('dept', v? '':'Bitte Abteilung eintragen.'); ok &&= !!v; }
+      if (!emailEl.value){
+        err('email','Bitte E-Mail eintragen.'); ok = false;
+      } else if (!emailEl.checkValidity()){
+        err('email','Ungültige E-Mail-Adresse.'); ok = false;
+      } else { err('email',''); }
 
-      err('attending', attending? '':'Bitte auswählen, ob du kommst.'); ok &&= !!attending;
+      err('city', city? '' : 'Bitte Stadt/Ort eintragen.'); ok &&= !!city;
+      err('country', country? '' : 'Bitte Land eintragen.'); ok &&= !!country;
+      err('deo_from', deo_from? '' : 'Bitte Startmonat/-jahr angeben.'); ok &&= !!deo_from;
+      err('deo_to', deo_to? '' : 'Bitte Endmonat/-jahr angeben.'); ok &&= !!deo_to;
+
+      if(role==='schueler'){ const v = $('classes')?.value.trim() || ''; err('classes', v? '' : 'Bitte besuchte Klassen eintragen.'); ok &&= !!v; }
+      if(role==='lehrer'){ const v = $('subjects')?.value.trim() || ''; err('subjects', v? '' : 'Bitte Fächer & Klassen eintragen.'); ok &&= !!v; }
+      if(role==='verwaltung'){ const v = $('dept')?.value.trim() || ''; err('dept', v? '' : 'Bitte Abteilung eintragen.'); ok &&= !!v; }
+
+      err('attending', attending? '' : 'Bitte auswählen, ob du kommst.'); ok &&= !!attending;
       if(attending==='ja'){
         const c = Number($('companions').value);
         const good = Number.isFinite(c) && c>=0;
-        err('companions', good? '':'Bitte Anzahl Begleiter (≥ 0).'); ok &&= good;
+        err('companions', good? '' : 'Bitte Anzahl Begleiter (≥ 0).'); ok &&= good;
       } else { err('companions',''); }
 
-      err('future_interest', future_interest? '':'Bitte Auswahl treffen.'); ok &&= !!future_interest;
-      err('consent', consent? '':'Bitte Zustimmung erteilen.'); ok &&= consent;
+      err('future_interest', future_interest? '' : 'Bitte Auswahl treffen.'); ok &&= !!future_interest;
+      err('consent', consent? '' : 'Bitte Zustimmung erteilen.'); ok &&= consent;
 
       return ok;
     }
+
+    // beim Verlassen E-Mail trimmen (optional)
+    $('email').addEventListener('blur', () => { $('email').value = $('email').value.trim(); });
 
     // Form submit
     $('form').addEventListener('submit', (e)=>{
@@ -240,7 +281,7 @@
       const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `vedeo-nrw-anmeldung-${(data.name||'unbekannt').replace(/\\s+/g,'_')}.json`;
+      a.href = url; a.download = `vedeo-nrw-anmeldung-${(data.name||'unbekannt').replace(/\s+/g,'_')}.json`;
       a.click(); URL.revokeObjectURL(url);
     });
 
@@ -269,7 +310,7 @@
         '',
         `Zukünftige VEDEO Treffen – Interesse in NRW: ${d.future_interest}`,
         `Weitere Orte: ${d.future_locations||''}`,
-      ].filter(Boolean).join('\\n');
+      ].filter(Boolean).join('\n');
       const body = encodeURIComponent(lines);
       window.location.href = `mailto:${encodeURIComponent(recipient)}?cc=${encodeURIComponent(ccRecipient)}&subject=${subject}&body=${body}`;
     });
