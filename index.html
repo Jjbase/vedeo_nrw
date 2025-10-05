@@ -6,10 +6,7 @@
   <title>VEDEO NRW – Anmeldung (11.10.2025 Düsseldorf)</title>
   <meta name="description" content="Anmeldung für das VEDEO NRW Treffen am 11. Oktober 2025 in Düsseldorf.">
   <style>
-    :root{
-      --flag-black:#000; --flag-red:#dd0000; --flag-gold:#ffce00;
-      --bg:#f7f7f8; --text:#1f2937; --muted:#6b7280; --card:#fff; --border:#e5e7eb;
-    }
+    :root{ --flag-black:#000; --flag-red:#dd0000; --flag-gold:#ffce00; --bg:#f7f7f8; --text:#1f2937; --muted:#6b7280; --card:#fff; --border:#e5e7eb; }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,Segoe UI,Roboto,Arial,sans-serif}
     .wrap{max-width:960px;margin:24px auto;padding:0 16px}
@@ -17,7 +14,7 @@
     h1{margin:.2rem 0 0;font-size:clamp(26px,4vw,38px);font-weight:800}
     .subtitle{margin-top:6px;color:#fff;opacity:.95}
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:0 6px 18px rgba(0,0,0,.05);margin-top:16px}
-    h2{color:var(--flag-red);margin: 8px 0 12px;font-size:clamp(18px,2.6vw,22px);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
+    h2{color:var(--flag-red);margin:8px 0 12px;font-size:clamp(18px,2.6vw,22px);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
     .grid{display:grid;gap:14px;grid-template-columns:1fr}
     @media(min-width:760px){ .grid-2{grid-template-columns:repeat(2,1fr)} }
     label{display:block;font-weight:600;margin-bottom:6px}
@@ -53,9 +50,7 @@
         netlify-honeypot="bot-field"
         novalidate
       >
-        <!-- Pflicht für Netlify-Erkennung -->
         <input type="hidden" name="form-name" value="anmeldung">
-        <!-- Spam-Honeypot -->
         <p class="hide"><label>Bitte frei lassen <input name="bot-field"></label></p>
 
         <!-- 1) Kontakt -->
@@ -157,7 +152,7 @@
         </p>
 
         <div class="actions">
-          <button class="btn primary" type="submit">E-Mail direkt senden</button>
+          <button class="btn primary" type="submit">Absenden</button>
           <button class="btn" type="button" id="btnJson">Daten als JSON herunterladen</button>
           <button class="btn" type="reset">Zurücksetzen</button>
         </div>
@@ -166,6 +161,7 @@
 
     <footer>
       © <span id="y"></span> VEDEO NRW – Treffen Düsseldorf, 11.10.2025
+      <!-- Optional: <a href="/admin.html">Admin</a> -->
     </footer>
   </div>
 
@@ -175,7 +171,6 @@
     const err = (k,m)=>{ const el=document.querySelector(`[data-err="${k}"]`); if(el) el.textContent=m||''; };
     $('#y').textContent = new Date().getFullYear();
 
-    // rollenspezifische Felder
     function renderRoleExtra(){
       const role = document.querySelector('input[name="role"]:checked').value;
       const wrap = $('#role-extra');
@@ -199,7 +194,6 @@
     $$('.radio input[name="role"]').forEach(r=>r.addEventListener('change',renderRoleExtra));
     renderRoleExtra();
 
-    // Begleiter nur bei "ja"
     function toggleCompanions(){
       const v = document.querySelector('input[name="attending"]:checked')?.value || '';
       $('#companions-wrap').classList.toggle('hide', v!=='ja');
@@ -207,7 +201,6 @@
     $$('input[name="attending"]').forEach(r=>r.addEventListener('change',toggleCompanions));
     toggleCompanions();
 
-    // leichte Vorvalidierung (blockt nur bei Fehlern)
     $('#form').addEventListener('submit',(e)=>{
       let ok = true;
       const must = [
@@ -235,7 +228,6 @@
       if(!ok){ e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); }
     });
 
-    // JSON-Download
     $('#btnJson').addEventListener('click', ()=>{
       const role = document.querySelector('input[name="role"]:checked')?.value;
       const data = {
